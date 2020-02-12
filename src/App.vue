@@ -1,17 +1,38 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <HelloWorld/>
+    <ul class="user-list">
+      <li v-for="(user, userIndex) in users" 
+          :key="user.id">
+        <div>
+          <strong>id: </strong>
+          {{ user.id }}
+        </div>
+        <div>
+          <strong>name:</strong>
+           {{ user.name }}
+        </div>
+        <div>
+          <strong>email:</strong>
+           {{ user.email }}
+        </div>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
-
+import axios from 'axios'
 export default {
   name: 'App',
-  components: {
-    HelloWorld
+  created () {
+    axios.get('/users').then( ({ data }) => {
+      this.users = data.users
+    })
+  },
+  data () {
+    return {
+      users: []
+    }
   }
 }
 </script>
@@ -23,6 +44,17 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+.user-list {
+  list-style-type: none;
+  width: 500px;
+  margin:0 auto;
+}
+.user-list li {
+  text-align: left;
+  padding: 10px;
+}
+.user-list li:not(:last-child) {
+  border-bottom: 1px solid #E5E9F2;
 }
 </style>
